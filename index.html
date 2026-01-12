@@ -3,54 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Wishes</title>
+    <title>Happy Birthday Wishes Ultimate</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+
     <style>
         body { margin: 0; overflow: hidden; background-color: #1a0f1a; font-family: 'Segoe UI', sans-serif; }
-        #canvas-container { width: 100%; height: 100vh; display: block; background: radial-gradient(circle at center, #332033 0%, #000000 100%); }
+        #canvas-container { width: 100%; height: 100vh; display: block; background: radial-gradient(circle at center, #4a2c4a 0%, #000000 100%); }
         
         #ui-layer {
-            position: absolute; bottom: 30px; width: 100%;
+            position: absolute; bottom: 20px; width: 100%;
             text-align: center; pointer-events: none; z-index: 100;
         }
         
         .badge {
-            display: inline-block; background: rgba(255, 105, 180, 0.3);
-            border: 2px solid #FFD700; color: #FFD700;
-            padding: 10px 25px; border-radius: 50px;
-            font-size: 18px; font-weight: bold; margin-bottom: 10px;
-            text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
-            text-shadow: 0 0 10px #FF69B4;
-            backdrop-filter: blur(5px);
+            display: inline-block; background: rgba(255, 182, 193, 0.4);
+            border: 3px solid #FFD700; color: #FFF;
+            padding: 12px 30px; border-radius: 50px;
+            font-size: 20px; font-weight: bold; margin-bottom: 15px;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px); font-family: 'Pacifico', cursive;
         }
 
-        .guide { color: #ffb7c5; font-size: 14px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); font-weight: 600;}
+        .guide { color: #ffcce0; font-size: 15px; margin-bottom: 25px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-weight: 600; background: rgba(0,0,0,0.3); display: inline-block; padding: 5px 15px; border-radius: 20px;}
         .guide b { color: #FFD700; }
 
         button {
             pointer-events: auto; cursor: pointer;
-            background: linear-gradient(to right, #ff758c, #ff7eb3);
-            color: #FFF; border: 2px solid #fff;
-            padding: 15px 50px; border-radius: 30px; 
-            font-weight: 800; font-size: 16px;
-            box-shadow: 0 0 30px rgba(255, 117, 140, 0.6);
-            animation: pulse 2s infinite;
-            text-transform: uppercase;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            color: #bf3f3f; border: 3px solid #fff;
+            padding: 18px 60px; border-radius: 35px; 
+            font-weight: 900; font-size: 18px;
+            box-shadow: 0 10px 30px rgba(255, 154, 158, 0.5);
+            animation: floating 3s ease-in-out infinite;
+            text-transform: uppercase; transition: all 0.3s ease;
         }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 117, 140, 0.6); } 50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 117, 140, 0.8); } 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 117, 140, 0.6); } }
+        button:hover { transform: scale(1.1); background: linear-gradient(45deg, #fad0c4 0%, #ff9a9e 100%); color: white;}
+        @keyframes floating { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
 
         #camera-preview {
-            position: absolute; top: 15px; right: 15px;
-            width: 120px; height: 90px;
-            border: 2px solid rgba(255, 192, 203, 0.5); 
-            transform: scaleX(-1); opacity: 0.5; border-radius: 12px;
-            box-shadow: 0 0 10px rgba(255,192,203,0.3);
+            position: absolute; top: 20px; right: 20px;
+            width: 140px; height: 105px;
+            border: 3px solid rgba(255, 255, 255, 0.7); 
+            transform: scaleX(-1); opacity: 0.7; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         
         #error-log { display: none; position: absolute; top: 0; left: 0; color: red; background: rgba(0,0,0,0.8); z-index: 999; padding: 10px; }
@@ -59,11 +62,13 @@
 <body>
     <div id="error-log"></div>
     <div id="ui-layer">
-        <div id="status" class="badge">🎂 Sinh Nhật Vui Vẻ 🎂</div>
+        <div id="status" class="badge" style="color: #FFD700;">🎂 Chúc Mừng Sinh Nhật 🎂</div>
+        <br>
         <div class="guide">
-            🖐 <b>Xòe tay:</b> Bung Pháo Giấy & Ảnh &nbsp;|&nbsp; 👌 <b>Chạm ngón:</b> Xem ảnh kỷ niệm &nbsp;|&nbsp; ✊ <b>Nắm tay:</b> Thu Bánh Kem
+            🖐 <b>Xòe tay:</b> Bung Lụa! &nbsp;|&nbsp; 👌 <b>Chạm ngón:</b> Xem Ảnh &nbsp;|&nbsp; ✊ <b>Nắm tay:</b> Hiện Bánh Kem
         </div>
-        <button id="btnStart" onclick="startSystem()">Gửi Lời Chúc</button>
+        <br>
+        <button id="btnStart" onclick="startSystem()">Bắt Đầu Bữa Tiệc!</button>
     </div>
 
     <div id="canvas-container"></div>
@@ -72,120 +77,165 @@
 
     <script>
         // ==========================================
-        // 1. Cấu hình & Tài nguyên (Chủ đề Sinh Nhật)
+        // 1. Cấu hình & Tài nguyên (Nâng cấp hình ảnh)
         // ==========================================
-        const MUSIC_URL = "./audio.mp3"; // Đảm bảo đây là nhạc Happy Birthday
+        const MUSIC_URL = "./audio.mp3"; 
         let bgMusic = new Audio(MUSIC_URL);
-        bgMusic.loop = true; bgMusic.volume = 0.7;
+        bgMusic.loop = true; bgMusic.volume = 0.6;
 
         const loader = new THREE.TextureLoader();
-        // Ảnh người yêu
         const photoFiles = ['./image1.jpeg', './image2.jpeg', './image3.jpeg', './image4.jpeg', './image5.jpeg'];
         const photoTextures = [];
         photoFiles.forEach((f, i) => photoTextures[i] = loader.load(f));
 
-        // --- Tạo Texture cho Bánh, Nến, Pháo giấy ---
+        // --- Tạo Texture nét hơn ---
         function createCustomTexture(type) {
             const canvas = document.createElement('canvas');
-            canvas.width = 64; canvas.height = 64;
+            canvas.width = 128; canvas.height = 128; // Tăng độ phân giải
             const ctx = canvas.getContext('2d');
-            const cx = 32, cy = 32;
+            const cx = 64, cy = 64;
 
-            if (type === 'cake_sprinkle') {
-                // Hạt màu rắc trên bánh (nhiều màu pastel)
-                const colors = ['#FFB7C5', '#FFFACD', '#ADD8E6', '#E6E6FA', '#FFDAB9'];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 30);
-                grd.addColorStop(0, color);
-                grd.addColorStop(0.4, color);
+            if (type === 'candle_flame') {
+                // Ngọn lửa nến chân thực hơn
+                const grd = ctx.createRadialGradient(cx, cy, 10, cx, cy, 60);
+                grd.addColorStop(0, 'rgba(255, 255, 200, 1)'); // Tâm trắng vàng
+                grd.addColorStop(0.4, 'rgba(255, 150, 0, 0.8)'); // Giữa cam
+                grd.addColorStop(0.8, 'rgba(200, 50, 0, 0.3)'); // Viền đỏ
                 grd.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = grd; ctx.fillRect(0,0,64,64);
-
-            } else if (type === 'candle_flame') {
-                // Ngọn lửa nến ấm áp
-                const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 30);
-                grd.addColorStop(0, '#FFF'); 
-                grd.addColorStop(0.2, '#FFD700'); 
-                grd.addColorStop(0.6, '#FF4500');
-                grd.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = grd; ctx.fillRect(0,0,64,64);
-
-            } else if (type === 'confetti') {
-                // Pháo giấy (hình vuông nhỏ, sáng)
-                ctx.fillStyle = `hsl(${Math.random()*360}, 100%, 70%)`;
-                ctx.translate(cx, cy);
-                ctx.rotate(Math.random() * Math.PI);
-                ctx.fillRect(-15, -15, 30, 30);
-                ctx.strokeStyle = "rgba(255,255,255,0.5)"; ctx.lineWidth=2; ctx.strokeRect(-15,-15,30,30);
+                ctx.fillStyle = grd; ctx.fillRect(0,0,128,128);
+            } else {
+                // Confetti / Sprinkles (Tròn, sắc nét)
+                ctx.beginPath();
+                ctx.arc(cx, cy, 60, 0, Math.PI * 2);
+                ctx.fillStyle = "#FFFFFF";
+                ctx.fill();
             }
             return new THREE.CanvasTexture(canvas);
         }
 
-        // Tạo trước một số texture để dùng
         const commonTextures = {
             flame: createCustomTexture('candle_flame'),
-            sprinkle: createCustomTexture('cake_sprinkle'), // Sẽ tạo cái mới cho mỗi hạt để đa dạng màu
-            confetti: createCustomTexture('confetti')
+            particleBase: createCustomTexture('particle')
         };
 
         // ==========================================
-        // 2. Thông số kỹ thuật (Hình dạng Bánh Kem)
+        // 2. Thông số kỹ thuật Bánh Kem Rắn
         // ==========================================
         const CONFIG = {
-            cakeCount: 3000,    // Số hạt tạo hình bánh
-            candleCount: 150,   // Số ngọn nến
-            confettiCount: 200, // Số hạt pháo giấy
-            explodeRadius: 80,  // Bán kính nổ
-            photoOrbitRadius: 30,
-            // Cấu trúc bánh 2 tầng
-            tier1Radius: 40, tier1Height: 25,
-            tier2Radius: 25, tier2Height: 20,
-            totalHeight: 45 // tier1Height + tier2Height
+            sprinkleCount: 2000, // Số hạt cốm rắc
+            candleCount: 12,      // Số cây nến (ít hơn nhưng chất hơn)
+            confettiCount: 300,
+            explodeRadius: 90,
+            photoOrbitRadius: 35,
+            // Kích thước cốt bánh
+            t1R: 45, t1H: 30, // Tầng 1 (Radius, Height)
+            t2R: 30, t2H: 25, // Tầng 2
         };
+        CONFIG.totalH = CONFIG.t1H + CONFIG.t2H;
 
         let scene, camera, renderer;
-        let groupCake, groupCandles, groupConfetti;
+        let cakeSolidGroup; // Nhóm chứa cốt bánh rắn và thân nến
+        let groupSprinkles, groupCandleFlames, groupConfetti;
         let photoMeshes = [];    
         let titleMesh, subTitleMesh;
         
-        let state = 'CAKE'; // Trạng thái ban đầu là Bánh
+        let state = 'CAKE'; 
         let selectedIndex = 0;
         let handX = 0.5;
         let time = 0;
 
         // ==========================================
-        // 3. Khởi tạo 3D Scene
+        // 3. Khởi tạo 3D Scene & Bánh Kem Đẹp
         // ==========================================
         function init3D() {
             const container = document.getElementById('canvas-container');
             scene = new THREE.Scene();
-            // Sương mù màu tím tối
-            scene.fog = new THREE.FogExp2(0x1a0f1a, 0.0015);
+            scene.fog = new THREE.FogExp2(0x1a0f1a, 0.001);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
-            camera.position.z = 120;
-            camera.position.y = 20;
-            camera.lookAt(0,0,0);
+            camera.position.set(0, 30, 140); // Góc nhìn cao hơn một chút
+            camera.lookAt(0, 10, 0);
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            // renderer.outputEncoding = THREE.sRGBEncoding;
+            renderer.shadowMap.enabled = true; // Bật đổ bóng
             container.appendChild(renderer.domElement);
 
-            // Ánh sáng môi trường nhẹ
-            const ambientLight = new THREE.AmbientLight(0xffb7c5, 0.4);
+            // --- Ánh sáng (Quan trọng để bánh đẹp) ---
+            const ambientLight = new THREE.AmbientLight(0xffd1dc, 0.5); // Ánh sáng môi trường hồng phấn
             scene.add(ambientLight);
 
-            // Tạo các nhóm hạt
-            groupCake = createParticleSystem('cake', CONFIG.cakeCount, 2.5);
-            groupCandles = createParticleSystem('candle', CONFIG.candleCount, 4.0);
-            groupConfetti = createParticleSystem('confetti', CONFIG.confettiCount, 3.5);
+            const mainLight = new THREE.PointLight(0xfffff0, 1.2, 300); // Đèn chính màu kem
+            mainLight.position.set(50, 80, 50);
+            mainLight.castShadow = true;
+            scene.add(mainLight);
+            
+            const rimLight = new THREE.PointLight(0xffaec9, 0.8, 300); // Đèn viền màu hồng đậm
+            rimLight.position.set(-50, 20, -50);
+            scene.add(rimLight);
+
+            // --- Tạo Cốt Bánh Rắn (Solid Cake) ---
+            createSolidCake();
+
+            // --- Tạo các nhóm hạt (Particles) ---
+            groupSprinkles = createParticleSystem('sprinkle', CONFIG.sprinkleCount, 1.8);
+            groupCandleFlames = createParticleSystem('candle_flame', CONFIG.candleCount, 5.0);
+            groupConfetti = createParticleSystem('confetti', CONFIG.confettiCount, 4.0);
 
             createPhotos();
             createDecorations();
             animate();
         }
+
+        // Hàm tạo cốt bánh rắn và thân nến
+        function createSolidCake() {
+            cakeSolidGroup = new THREE.Group();
+
+            // Chất liệu kem (Icing Material)
+            const icingMat = new THREE.MeshStandardMaterial({
+                color: 0xffbbcc, // Màu hồng kem
+                roughness: 0.4,  // Độ nhám vừa phải
+                metalness: 0.1,
+                side: THREE.DoubleSide
+            });
+
+            // Tầng 1
+            const tier1Geo = new THREE.CylinderGeometry(CONFIG.t1R, CONFIG.t1R, CONFIG.t1H, 64);
+            const tier1Mesh = new THREE.Mesh(tier1Geo, icingMat);
+            tier1Mesh.position.y = CONFIG.t1H / 2 - CONFIG.totalH / 2;
+            tier1Mesh.receiveShadow = true; tier1Mesh.castShadow = true;
+            cakeSolidGroup.add(tier1Mesh);
+
+            // Tầng 2
+            const tier2Geo = new THREE.CylinderGeometry(CONFIG.t2R, CONFIG.t2R, CONFIG.t2H, 64);
+            const tier2Mesh = new THREE.Mesh(tier2Geo, icingMat);
+            tier2Mesh.position.y = CONFIG.t1H + CONFIG.t2H / 2 - CONFIG.totalH / 2;
+            tier2Mesh.receiveShadow = true; tier2Mesh.castShadow = true;
+            cakeSolidGroup.add(tier2Mesh);
+
+            // Thêm thân nến (Sáp nến rắn)
+            const waxMat = new THREE.MeshStandardMaterial({ color: 0xffeeaa, roughness: 0.2 });
+            const candleGeo = new THREE.CylinderGeometry(1.2, 1.2, 8, 16);
+            
+            for(let i=0; i<CONFIG.candleCount; i++) {
+                const mesh = new THREE.Mesh(candleGeo, waxMat);
+                // Vị trí nến (sẽ khớp với vị trí ngọn lửa particle sau này)
+                let r, y;
+                const angle = (i / CONFIG.candleCount) * Math.PI * 2;
+                if (i % 2 === 0) { // Tầng dưới
+                     r = CONFIG.t1R - 5; y = CONFIG.t1H - CONFIG.totalH/2 + 4;
+                } else { // Tầng trên
+                     r = CONFIG.t2R - 4; y = CONFIG.totalH/2 + 4;
+                }
+                mesh.position.set(r * Math.cos(angle), y, r * Math.sin(angle));
+                mesh.castShadow = true;
+                cakeSolidGroup.add(mesh);
+            }
+
+            scene.add(cakeSolidGroup);
+        }
+
 
         function createParticleSystem(type, count, size) {
             const pPositions = [];
@@ -195,77 +245,68 @@
             const colorObj = new THREE.Color();
             
             for(let i=0; i<count; i++) {
-                // --- Tạo hình dáng Bánh Kem (Hình trụ) ---
                 let tx, ty, tz;
-                let r, theta, hRel;
+                
+                // --- Định vị hạt trên bề mặt bánh ---
+                if (type === 'sprinkle') {
+                    const tier = Math.random() > 0.4 ? 1 : 2;
+                    let r, hRel, yBase;
+                    if (tier === 1) { r=CONFIG.t1R; hRel=CONFIG.t1H; yBase = -CONFIG.totalH/2; }
+                    else { r=CONFIG.t2R; hRel=CONFIG.t2H; yBase = CONFIG.t1H - CONFIG.totalH/2; }
 
-                if (type === 'cake') {
-                    // Chia hạt thành 2 tầng bánh
-                    const tier = Math.random() > 0.4 ? 1 : 2; // Tầng 1 lớn hơn
-                    if (tier === 1) {
-                        r = Math.sqrt(Math.random()) * CONFIG.tier1Radius;
-                        hRel = Math.random() * CONFIG.tier1Height;
-                        ty = hRel - CONFIG.totalHeight / 2;
-                    } else {
-                        r = Math.sqrt(Math.random()) * CONFIG.tier2Radius;
-                        hRel = Math.random() * CONFIG.tier2Height;
-                        ty = hRel - CONFIG.totalHeight / 2 + CONFIG.tier1Height;
+                    // Rắc trên mặt phẳng hoặc xung quanh thành
+                    if(Math.random() > 0.3) { // Xung quanh thành
+                         const theta = Math.random() * Math.PI * 2;
+                         tx = (r + 0.5) * Math.cos(theta); // +0.5 để nổi lên trên cốt bánh
+                         ty = yBase + Math.random() * hRel;
+                         tz = (r + 0.5) * Math.sin(theta);
+                    } else { // Trên mặt phẳng
+                        const theta = Math.random() * Math.PI * 2;
+                        const rad = Math.sqrt(Math.random()) * r;
+                         tx = rad * Math.cos(theta);
+                         ty = yBase + hRel + 0.5;
+                         tz = rad * Math.sin(theta);
                     }
-                    // Tạo màu sắc ngẫu nhiên kiểu hạt rắc
-                    colorObj.setHSL(Math.random(), 0.8, 0.8);
+                    // Màu cốm pastel
+                    colorObj.setHSL(Math.random(), 0.7, 0.8);
                     colors.push(colorObj.r, colorObj.g, colorObj.b);
 
-                } else if (type === 'candle') {
-                    // Nến đặt trên viền các tầng bánh
-                    const tier = Math.random() > 0.5 ? 1 : 2;
-                    if (tier === 1) {
-                         // Viền tầng 1 (phần lộ ra)
-                        r = CONFIG.tier1Radius * (0.85 + Math.random() * 0.15);
-                        ty = CONFIG.tier1Height - CONFIG.totalHeight / 2 + 1; 
-                    } else {
-                        // Viền và mặt tầng 2 (trên cùng)
-                        r = CONFIG.tier2Radius * (Math.random() > 0.7 ? (Math.random()*0.8) : (0.8 + Math.random()*0.2));
-                        ty = CONFIG.totalHeight / 2 + 1;
-                    }
-                    colorObj.set(0xFFD700); // Màu vàng cam cho nến
-                     colors.push(colorObj.r, colorObj.g, colorObj.b);
+                } else if (type === 'candle_flame') {
+                    // Vị trí ngọn lửa khớp với đỉnh thân nến đã tạo
+                    const angle = (i / count) * Math.PI * 2;
+                    let r, y;
+                    if (i % 2 === 0) { r = CONFIG.t1R - 5; y = CONFIG.t1H - CONFIG.totalH/2 + 8 + 2; } // + chiều cao nến + offset lửa
+                    else { r = CONFIG.t2R - 4; y = CONFIG.totalH/2 + 8 + 2; }
+                    tx = r * Math.cos(angle); ty = y; tz = r * Math.sin(angle);
+                    colorObj.set(0xffaa00); colors.push(colorObj.r, colorObj.g, colorObj.b);
+
                 } else {
-                    // Confetti xuất phát từ tâm
-                    r = Math.random() * 5; ty = 0;
-                    colorObj.setHSL(Math.random(), 1.0, 0.6);
-                    colors.push(colorObj.r, colorObj.g, colorObj.b);
+                    // Confetti
+                    tx=0; ty=0; tz=0;
+                    colorObj.setHSL(Math.random(), 1.0, 0.6); colors.push(colorObj.r, colorObj.g, colorObj.b);
                 }
-
-                theta = Math.random() * Math.PI * 2;
-                tx = r * Math.cos(theta);
-                tz = r * Math.sin(theta);
                 pCakeTargets.push(tx, ty, tz);
 
-                // --- Vị trí nổ (Hình cầu) ---
+                // --- Vị trí nổ ---
                 const u = Math.random(); const v = Math.random();
                 const phi = Math.acos(2 * v - 1); const lam = 2 * Math.PI * u;
-                let radMult = (type === 'confetti') ? 1.5 : 1.0;
+                let radMult = (type === 'confetti') ? 1.5 : (type==='candle_flame' ? 0.2 : 1.0);
                 const rad = CONFIG.explodeRadius * Math.cbrt(Math.random()) * radMult;
                 pExplodeTargets.push(rad * Math.sin(phi) * Math.cos(lam), rad * Math.sin(phi) * Math.sin(lam), rad * Math.cos(phi));
 
-                // Vị trí ban đầu
-                pPositions.push(tx, ty, tz);
+                if(type==='confetti') pPositions.push(0,0,0); else pPositions.push(tx, ty, tz);
             }
 
             const geo = new THREE.BufferGeometry();
             geo.setAttribute('position', new THREE.Float32BufferAttribute(pPositions, 3));
-            if(type !== 'candle') geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
             geo.userData = { cake: pCakeTargets, explode: pExplodeTargets };
 
-            // Chọn material phù hợp
             let mat;
-            if (type === 'candle') {
+            if (type === 'candle_flame') {
                 mat = new THREE.PointsMaterial({ size: size, map: commonTextures.flame, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
             } else {
-                 mat = new THREE.PointsMaterial({ size: size, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false });
-                 // Dùng texture tròn mặc định cho cake/confetti để trông mềm hơn
-                 const loader = new THREE.TextureLoader();
-                 mat.map = loader.load('https://threejs.org/examples/textures/sprites/disc.png');
+                 mat = new THREE.PointsMaterial({ size: size, vertexColors: true, map: commonTextures.particleBase, transparent: true, opacity: (type==='sprinkle'?0.9:0.8), blending: THREE.NormalBlending, depthWrite: false });
             }
 
             const points = new THREE.Points(geo, mat);
@@ -274,121 +315,121 @@
         }
 
         function createPhotos() {
-            const geo = new THREE.PlaneGeometry(10, 10); // Ảnh to hơn chút
-            const borderGeo = new THREE.PlaneGeometry(11, 11); 
-            const borderMat = new THREE.MeshBasicMaterial({ color: 0xFF69B4 }); // Viền hồng
+            const geo = new THREE.PlaneGeometry(12, 12); 
+            const borderGeo = new THREE.PlaneGeometry(13, 13); 
+            // Viền ảnh lấp lánh
+            const borderMat = new THREE.MeshStandardMaterial({ color: 0xFFD700, metalness: 0.8, roughness: 0.2 }); 
 
             for(let i=0; i<5; i++) {
-                const mat = new THREE.MeshBasicMaterial({ 
-                    map: photoTextures[i], side: THREE.DoubleSide, transparent: true 
-                });
+                const mat = new THREE.MeshBasicMaterial({ map: photoTextures[i], side: THREE.DoubleSide });
                 const mesh = new THREE.Mesh(geo, mat);
                 const border = new THREE.Mesh(borderGeo, borderMat);
                 border.position.z = -0.1; 
                 mesh.add(border);
-                
-                mesh.visible = false;
-                mesh.scale.set(0,0,0);
+                mesh.visible = false; mesh.scale.set(0,0,0);
                 scene.add(mesh);
                 photoMeshes.push(mesh);
             }
         }
 
         function createDecorations() {
-            // Chữ chính: HAPPY BIRTHDAY
             const canvas = document.createElement('canvas');
             canvas.width = 1024; canvas.height = 256;
             const ctx = canvas.getContext('2d');
-            ctx.font = 'bold 100px "Dancing Script", cursive, sans-serif'; // Font chữ mềm mại hơn
+            // Font chữ đẹp hơn
+            ctx.font = 'bold 110px "Dancing Script", cursive'; 
             ctx.fillStyle = '#FFD700'; ctx.textAlign = 'center';
-            ctx.shadowColor = "#FF69B4"; ctx.shadowBlur = 30; ctx.shadowOffsetX = 5; ctx.shadowOffsetY = 5;
-            ctx.fillText("HAPPY BIRTHDAY", 512, 150);
+            ctx.shadowColor = "#FF1493"; ctx.shadowBlur = 35; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+            ctx.fillText("HAPPY BIRTHDAY", 512, 130);
+            ctx.strokeStyle = '#FFF'; ctx.lineWidth = 3; ctx.strokeText("HAPPY BIRTHDAY", 512, 130);
             
             const tex = new THREE.CanvasTexture(canvas);
-            const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
-            titleMesh = new THREE.Mesh(new THREE.PlaneGeometry(70, 17.5), mat);
-            titleMesh.position.set(0, 60, 0);
+            const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side:THREE.DoubleSide });
+            titleMesh = new THREE.Mesh(new THREE.PlaneGeometry(75, 18.75), mat);
+            titleMesh.position.set(0, 75, 0);
             scene.add(titleMesh);
 
-            // Chữ phụ: Lời chúc
             const subCanvas = document.createElement('canvas');
             subCanvas.width = 1024; subCanvas.height = 128;
             const subCtx = subCanvas.getContext('2d');
-            subCtx.font = 'italic 50px "Segoe UI", sans-serif';
-            subCtx.fillStyle = '#FFB7C5'; subCtx.textAlign = 'center';
-            subCtx.shadowColor = "#000"; subCtx.shadowBlur = 10;
-            subCtx.fillText("Sinh nhật vui vẻ, người yêu dấu! ❤️", 512, 80);
+            subCtx.font = '40px "Pacifico", cursive';
+            subCtx.fillStyle = '#ffb7c5'; subCtx.textAlign = 'center';
+            subCtx.shadowColor = "rgba(0,0,0,0.5)"; subCtx.shadowBlur = 5;
+            subCtx.fillText("Chúc em tuổi mới luôn rạng ngời! ❤️", 512, 70);
 
             const subTex = new THREE.CanvasTexture(subCanvas);
-            const subMat = new THREE.MeshBasicMaterial({ map: subTex, transparent: true });
-            subTitleMesh = new THREE.Mesh(new THREE.PlaneGeometry(60, 7.5), subMat);
-            subTitleMesh.position.set(0, 45, 0);
+            subTitleMesh = new THREE.Mesh(new THREE.PlaneGeometry(60, 7.5), new THREE.MeshBasicMaterial({ map: subTex, transparent: true, side:THREE.DoubleSide }));
+            subTitleMesh.position.set(0, 55, 0);
             scene.add(subTitleMesh);
         }
 
-        function updateParticleGroup(group, targetState, speed, handRotY, time, isCandle) {
+        function updateParticleGroup(group, targetState, speed, handRotY, time, type) {
             const positions = group.geometry.attributes.position.array;
             const targetKey = (targetState === 'CAKE') ? 'cake' : 'explode';
-            // Khi xem ảnh, các hạt vẫn ở trạng thái nổ
             const targets = group.geometry.userData[(targetState === 'PHOTO') ? 'explode' : targetKey];
 
             for(let i=0; i<positions.length; i++) {
-                // Lerp vị trí mượt mà
                 positions[i] += (targets[i] - positions[i]) * speed;
             }
             group.geometry.attributes.position.needsUpdate = true;
             
             if (targetState === 'CAKE') {
-                // Xoay nhẹ bánh kem
-                group.rotation.y = Math.sin(time * 0.5) * 0.1; 
-                // Hiệu ứng nhấp nháy cho nến
-                if(isCandle) {
-                    const scale = 1 + Math.sin(time * 8 + group.uuid.charCodeAt(0)) * 0.15;
+                // Hạt dính vào bánh, xoay cùng bánh rắn
+                group.rotation.copy(cakeSolidGroup.rotation);
+                
+                if(type === 'candle_flame') {
+                    // Ngọn lửa nhấp nháy
+                    const scale = 1 + Math.sin(time * 10 + group.uuid.charCodeAt(0)) * 0.2;
                     group.scale.set(scale, scale, scale);
                 } else {
                     group.scale.set(1,1,1);
                 }
             } else {
+                // Hạt nổ ra, xoay tự do theo tay
                 group.scale.set(1,1,1);
-                // Xoay theo tay khi nổ
-                group.rotation.y += (handRotY - group.rotation.y) * 0.05;
-                // Thêm chút nhiễu động khi nổ
-                group.rotation.x = Math.sin(time)*0.05;
+                group.rotation.y += (handRotY - group.rotation.y) * 0.08;
+                group.rotation.x = Math.sin(time * 0.5)*0.1;
             }
         }
 
         function animate() {
             requestAnimationFrame(animate);
             time = Date.now() * 0.001;
-            const speed = 0.04; // Tốc độ di chuyển hạt chậm hơn cho mượt
-            const handRotY = (handX - 0.5) * 2.0;
+            const speed = 0.05;
+            const handRotY = (handX - 0.5) * 2.5;
 
-            updateParticleGroup(groupCake, state, speed, handRotY, time, false);
-            updateParticleGroup(groupCandles, state, speed, handRotY, time, true);
-            updateParticleGroup(groupConfetti, state, speed * 1.5, handRotY, time, false); // Pháo giấy bay nhanh hơn
+            // Xoay cốt bánh rắn nhẹ nhàng
+            if (state === 'CAKE') {
+                 cakeSolidGroup.rotation.y = Math.sin(time * 0.3) * 0.2;
+            }
+            
+            // Cập nhật các nhóm hạt
+            updateParticleGroup(groupSprinkles, state, speed, handRotY, time, 'sprinkle');
+            updateParticleGroup(groupCandleFlames, state, speed, handRotY, time, 'candle_flame');
+            updateParticleGroup(groupConfetti, state, speed * 1.2, handRotY, time, 'confetti');
 
-            // Cập nhật texture ảnh nếu cần
             photoMeshes.forEach((mesh, i) => {
                 if(!mesh.material.map && photoTextures[i]) {
                     mesh.material.map = photoTextures[i]; mesh.material.needsUpdate = true;
                 }
             });
 
-            // --- Xử lý trạng thái ---
+            // --- Xử lý trạng thái & Hiệu ứng chuyển đổi ---
+            const solidScaleTarget = (state === 'CAKE') ? 1 : 0;
+            // Lerp scale của cốt bánh rắn để hiện/ẩn mượt mà
+            cakeSolidGroup.scale.lerp(new THREE.Vector3(solidScaleTarget, solidScaleTarget, solidScaleTarget), 0.08);
+            
             if (state === 'CAKE') {
                 titleMesh.visible = true; subTitleMesh.visible = true;
-                // Hiệu ứng chữ nổi nhẹ
-                titleMesh.position.y = 60 + Math.sin(time * 1.5) * 2;
-                subTitleMesh.position.y = 45 + Math.sin(time * 2) * 1.5;
-                
+                titleMesh.position.y = 75 + Math.sin(time * 2) * 1.5;
+                titleMesh.lookAt(camera.position); subTitleMesh.lookAt(camera.position);
                 titleMesh.scale.lerp(new THREE.Vector3(1,1,1), 0.05);
                 subTitleMesh.scale.lerp(new THREE.Vector3(1,1,1), 0.05);
-                photoMeshes.forEach(m => { m.scale.lerp(new THREE.Vector3(0,0,0), 0.08); m.visible = false; });
+                photoMeshes.forEach(m => { m.scale.lerp(new THREE.Vector3(0,0,0), 0.1); m.visible = false; });
 
             } else if (state === 'EXPLODE') {
                 titleMesh.visible = false; subTitleMesh.visible = false;
-                
-                const baseAngle = groupCake.rotation.y + time * 0.2; // Xoay chậm quỹ đạo ảnh
+                const baseAngle = time * 0.3;
                 const angleStep = (Math.PI * 2) / 5;
                 let bestIdx = 0; let maxZ = -999;
 
@@ -396,21 +437,19 @@
                     mesh.visible = true;
                     const angle = baseAngle + i * angleStep;
                     const x = Math.sin(angle) * CONFIG.photoOrbitRadius;
-                    const z = Math.cos(angle) * CONFIG.photoOrbitRadius;
-                    const y = Math.sin(time * 1.2 + i) * 4; // Ảnh bay lượn lên xuống
+                    const z = Math.cos(angle) * CONFIG.photoOrbitRadius + 10; // Đẩy ra xa một chút
+                    const y = Math.sin(time + i) * 5; 
 
                     mesh.position.lerp(new THREE.Vector3(x, y, z), 0.08);
                     mesh.lookAt(camera.position);
 
-                    // Tìm ảnh gần nhất để chọn
                     if (z > maxZ) { maxZ = z; bestIdx = i; }
                     
-                    // Hiệu ứng khi ảnh ở gần/xa
-                    if (z > 10) { 
-                        const distScale = 1.2 + (z / CONFIG.photoOrbitRadius) * 0.5; 
+                    if (z > 15) { 
+                        const distScale = 1.0 + (z / CONFIG.photoOrbitRadius) * 0.4; 
                         mesh.scale.lerp(new THREE.Vector3(distScale, distScale, distScale), 0.08);
                     } else {
-                        mesh.scale.lerp(new THREE.Vector3(0.8, 0.8, 0.8), 0.08);
+                        mesh.scale.lerp(new THREE.Vector3(0.7, 0.7, 0.7), 0.08);
                     }
                 });
                 selectedIndex = bestIdx;
@@ -418,11 +457,10 @@
             } else if (state === 'PHOTO') {
                 photoMeshes.forEach((mesh, i) => {
                     if (i === selectedIndex) {
-                        // Ảnh được chọn bay lại gần
-                        mesh.position.lerp(new THREE.Vector3(0, 5, 70), 0.08);
-                        mesh.scale.lerp(new THREE.Vector3(6, 6, 6), 0.08);
+                        mesh.position.lerp(new THREE.Vector3(0, 5, 80), 0.08);
+                        mesh.scale.lerp(new THREE.Vector3(7, 7, 7), 0.08);
                         mesh.lookAt(camera.position);
-                        mesh.rotation.z = Math.sin(time)*0.05; // Nghiêng nhẹ
+                        mesh.rotation.z = Math.sin(time * 0.8) * 0.03;
                     } else {
                         mesh.scale.lerp(new THREE.Vector3(0,0,0), 0.08);
                     }
@@ -437,12 +475,8 @@
         // ==========================================
         function startSystem() {
             document.getElementById('btnStart').style.display = 'none';
-            // Cần tương tác người dùng để phát nhạc
-            bgMusic.play().then(() => {
-                console.log("Music started");
-            }).catch(e => {
-                console.log("Autoplay prevented. Music will start on interaction.", e);
-                // Thử phát lại khi có tương tác bất kỳ nếu lần đầu thất bại
+            bgMusic.play().then(() => console.log("Music playing")).catch(e => {
+                console.log("Auto-play blocked, waiting for interaction.");
                 document.body.addEventListener('click', () => bgMusic.play(), {once:true});
             });
             
@@ -455,78 +489,55 @@
             
             let frameCnt = 0;
             const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
-            // Tăng độ tin cậy để nhận diện mượt hơn
             hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.6, minTrackingConfidence: 0.6 });
 
             hands.onResults(results => {
-                // Vẽ preview camera (lật ngược)
-                ctx.save();
-                ctx.scale(-1, 1);
-                ctx.translate(-canvas.width, 0);
+                ctx.save(); ctx.scale(-1, 1); ctx.translate(-canvas.width, 0);
                 ctx.clearRect(0,0,canvas.width,canvas.height); 
                 ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
                 ctx.restore();
 
                 if(results.multiHandLandmarks.length > 0) {
                     const lm = results.multiHandLandmarks[0];
-                    handX = lm[9].x; // Lấy vị trí ngang của lòng bàn tay
-
-                    // Tính toán cử chỉ
-                    const tips = [8,12,16,20];
+                    handX = lm[9].x; 
                     const wrist = lm[0];
                     let openDist = 0;
-                    tips.forEach(i => openDist += Math.hypot(lm[i].x-wrist.x, lm[i].y-wrist.y));
+                    [8,12,16,20].forEach(i => openDist += Math.hypot(lm[i].x-wrist.x, lm[i].y-wrist.y));
                     const avgDist = openDist / 4;
-                    
-                    // Khoảng cách ngón cái và trỏ
                     const pinchDist = Math.hypot(lm[4].x-lm[8].x, lm[4].y-lm[8].y);
 
-                    // Logic chuyển trạng thái (Điều chỉnh ngưỡng cho phù hợp)
-                    if (avgDist < 0.3) { 
+                    if (avgDist < 0.25) { 
                         state = 'CAKE'; 
-                        statusDiv.innerText = "✊ Đang thu Bánh Kem"; statusDiv.style.color = "#FFB7C5";
+                        statusDiv.innerText = "✊ Đang giữ Bánh Kem"; statusDiv.style.color = "#FFB7C5";
                         statusDiv.style.borderColor = "#FFB7C5";
-                    } else if (pinchDist < 0.08) {
+                    } else if (pinchDist < 0.06) {
                         state = 'PHOTO';
-                        statusDiv.innerText = "👌 Đang xem Ảnh"; statusDiv.style.color = "#00FFFF";
+                        statusDiv.innerText = "👌 Đang ngắm Ảnh"; statusDiv.style.color = "#00FFFF";
                         statusDiv.style.borderColor = "#00FFFF";
                     } else {
                         state = 'EXPLODE'; 
-                        statusDiv.innerText = "🖐 Bung Pháo & Ảnh"; statusDiv.style.color = "#FFD700";
-                         statusDiv.style.borderColor = "#FFD700";
+                        statusDiv.innerText = "🖐 Bung Lụa & Ảnh!"; statusDiv.style.color = "#FFD700";
+                        statusDiv.style.borderColor = "#FFD700";
                     }
                 } else {
-                    // Không thấy tay thì về trạng thái bánh kem mặc định
                     if(state !== 'CAKE') {
                          state = 'CAKE';
-                         statusDiv.innerText = "🎂 Sinh Nhật Vui Vẻ 🎂"; statusDiv.style.color = "#FFD700";
+                         statusDiv.innerText = "🎂 Chúc Mừng Sinh Nhật 🎂"; statusDiv.style.color = "#FFD700";
                          statusDiv.style.borderColor = "#FFD700";
                     }
                 }
             });
 
             const cameraUtils = new Camera(video, {
-                onFrame: async () => {
-                    frameCnt++; if(frameCnt%2 !== 0) return; // Xử lý mỗi 2 frame để giảm tải
-                    await hands.send({image: video});
-                }, width: 640, height: 480 // Tăng độ phân giải camera input
+                onFrame: async () => { frameCnt++; if(frameCnt%2 === 0) await hands.send({image: video}); },
+                width: 640, height: 480
             });
             cameraUtils.start();
         }
 
         window.addEventListener('resize', () => {
-            if(camera) { 
-                camera.aspect = window.innerWidth/window.innerHeight; 
-                camera.updateProjectionMatrix(); 
-                renderer.setSize(window.innerWidth, window.innerHeight); 
-            }
+            if(camera) { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
         });
-        function logError(e) { document.getElementById('error-log').style.display='block'; document.getElementById('error-log').innerText+=e+"\n"; }
-        // Tải font chữ đẹp cho tiêu đề
-        const fontLink = document.createElement('link');
-        fontLink.href = "https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap";
-        fontLink.rel = "stylesheet";
-        document.head.appendChild(fontLink);
     </script>
 </body>
 </html>
